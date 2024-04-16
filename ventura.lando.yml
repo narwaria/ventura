@@ -1,0 +1,34 @@
+name: ventura
+recipe: drupal10
+config:
+  webroot: ./web
+proxy:
+  mailhog:
+    - mail.ventura.lndo.site
+  pma:
+    - pma.ventura.lndo.site
+services:
+  appserver:
+    build:
+      - composer install
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
+  pma:
+    type: phpmyadmin
+    hosts:
+      - database
+  node:
+    type: node
+tooling:
+  drush:
+    service: appserver
+    env:
+      DRUSH_OPTIONS_URI: "https://ventura.lndo.site"
+  npm:
+    service: node
+  node:
+    service: node
+  gulp:
+    service: node
